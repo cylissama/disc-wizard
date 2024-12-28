@@ -115,6 +115,25 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
+// A simple game loop placeholder
+function gameLoop() {
+    if (lootboxes.length > 0) {
+        //console.log('[Debug] Active lootboxes:', lootboxes.length);
+        //console.log('[Debug] Player position:', {x: player.x, y: player.y});
+    }
+    
+    update();
+    render();
+    requestAnimationFrame(gameLoop);
+}
+
+window.onload = () => {
+    console.log('[Debug] Game starting...');
+    init();
+    gameLoop();
+    console.log('[Debug] Game loop started');
+};
+
 function init() {
     console.log('[Debug] Initializing game...');
 
@@ -147,22 +166,3 @@ function init() {
     };
     console.log('[Debug] Player initialized:', player);
 }
-
-// A simple game loop placeholder
-function gameLoop() {
-    if (lootboxes.length > 0) {
-        //console.log('[Debug] Active lootboxes:', lootboxes.length);
-        //console.log('[Debug] Player position:', {x: player.x, y: player.y});
-    }
-    
-    update();
-    render();
-    requestAnimationFrame(gameLoop);
-}
-
-window.onload = () => {
-    console.log('[Debug] Game starting...');
-    init();
-    gameLoop();
-    console.log('[Debug] Game loop started');
-};

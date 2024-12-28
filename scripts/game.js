@@ -130,22 +130,22 @@ function openLootboxMenu(lootbox) {
 }
 
 function handlePlayerMovement() {
-    const oldPosition = { x: player.x, y: player.y };
+    const playerSize = 48; // Size of the player sprite
 
-    if (keys['ArrowUp']) player.y -= player.speed;
-    if (keys['ArrowDown']) player.y += player.speed;
-    if (keys['ArrowLeft']) player.x -= player.speed;
-    if (keys['ArrowRight']) player.x += player.speed;
+    // Store potential new position
+    let newX = player.x;
+    let newY = player.y;
 
-    // Only log if position actually changed
-    if (oldPosition.x !== player.x || oldPosition.y !== player.y) {
-        // console.log('[Debug] Player moved:', {
-        //     from: oldPosition,
-        //     to: { x: player.x, y: player.y },
-        //     speed: player.speed,
-        //     activeKeys: Object.entries(keys)
-        //         .filter(([_, value]) => value)
-        //         .map(([key]) => key)
-        // });
+    if (keys['ArrowUp']) newY -= player.speed;
+    if (keys['ArrowDown']) newY += player.speed;
+    if (keys['ArrowLeft']) newX -= player.speed;
+    if (keys['ArrowRight']) newX += player.speed;
+
+    // Check boundaries before applying movement
+    if (newX >= 0 && newX <= canvas.width - playerSize) {
+        player.x = newX;
+    }
+    if (newY >= 0 && newY <= canvas.height - playerSize) {
+        player.y = newY;
     }
 }
