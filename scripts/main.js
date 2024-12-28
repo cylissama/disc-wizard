@@ -1,10 +1,47 @@
-
-// declare vars
-let player;
 let cdImg;
 let playerImg;
 let discs = [];
 let enemies = [];
+
+const settings = {
+    playerSpeed: 5,
+    playerSize: 48
+};
+
+const SETTINGS_CONFIG = {
+    width: 400,
+    height: 300,
+    controls: [
+        {
+            id: 'playerSpeed',
+            label: 'Player Speed',
+            defaultValue: 5,
+            min: 1,
+            max: 10,
+            step: 1
+        },
+        {
+            id: 'playerSize',
+            label: 'Player Size',
+            defaultValue: 48,
+            min: 32,
+            max: 64,
+            step: 8
+        }
+    ]
+};
+
+let player = {
+    x: 100,
+    y: 100,
+    speed: settings.playerSpeed
+};
+
+const settingsMenu = new SettingsMenu();
+let settingsMenuActive = false;
+
+// sounds
+const spinSound = new Audio('assets/sounds/spin.mp3');
 
 // background
 let backgroundTexture = new Image();
@@ -73,6 +110,12 @@ canvas.addEventListener('click', (e) => {
     const mouseY = e.clientY - rect.top;
 
     if (!isMenuActive) {
+        // Handle settings menu clicks first if it's active
+        if (settingsMenuActive) {
+            settingsMenu.handleClick(mouseX, mouseY);
+            return; // Exit early to prevent other click handling
+        }
+
         const clickedOption = gameMenu.handleClick(mouseX, mouseY);
         if (clickedOption === "Spawn Lootbox") {
             const x = Math.random() * (canvas.width - 32);
@@ -80,6 +123,8 @@ canvas.addEventListener('click', (e) => {
             lootboxes.push(new LootBox(x, y));
             console.log('[Debug] Spawned lootbox at:', {x, y});
             console.log('[Debug] Total lootboxes:', lootboxes.length);
+        } else if (clickedOption === "Settings") {
+            settingsMenuActive = !settingsMenuActive;
         }
     }
 

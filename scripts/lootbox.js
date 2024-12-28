@@ -18,12 +18,18 @@ class LootBox {
         this.spinning = false;
         this.spinSpeed = 5; // Increased for better visibility
         this.spinTime = 0;
-        this.spinDuration = 3000; // 3 seconds duration
+        this.spinDuration = 2000; // 3 seconds duration
         this.finalContent = null;
         this.lastFrameTime = performance.now(); // Add this
         this.currentSpinContent = null; // Add tracking for current content
-    }
 
+        // Add explosion properties with default values
+        this.showExplosion = false;
+        this.explosionRadius = 0;
+        this.explosionMaxRadius = 500;
+        this.explosionDuration = 500;
+        this.explosionStartTime = 0;
+    }
 
     startSpinning() {
         this.spinning = true;
@@ -59,6 +65,7 @@ class LootBox {
             this.spinning = false;
             this.contents = this.finalContent;
             this.contentsImage.src = `assets/images/lootbox-contents/${this.contents}.png`;
+            this.startExplosion(); // Start explosion effect
             console.log('[Debug] Spin complete, landed on:', this.contents);
         }
     }
@@ -95,5 +102,36 @@ class LootBox {
                player.x + 48 > this.x &&
                player.y < this.y + this.height &&
                player.y + 48 > this.y;
+    }
+
+    startExplosion() {
+        this.showExplosion = true;
+        this.explosionRadius = 200;
+        this.explosionStartTime = performance.now();
+        console.log('[Debug] Starting explosion effect');
+    }
+
+    updateExplosion(now) {
+        if (!this.showExplosion) return;
+
+        // Ensure we have valid numbers
+        const elapsed = Math.max(0, now - this.explosionStartTime);
+        const progress = Math.min(Math.max(0, elapsed / this.explosionDuration), 1);
+        
+        // Ensure radius is a finite number
+        this.explosionRadius = Math.min(
+            this.explosionMaxRadius * progress,
+            this.explosionMaxRadius
+        );
+
+        console.log('[Debug] Explosion update:', {
+            elapsed,
+            progress,
+            radius: this.explosionRadius
+        });
+
+        if (progress >= 1) {
+            this.showExplosion = false;
+        }
     }
 }

@@ -7,6 +7,8 @@ Disc Wizard
 - gambling
 - titles like 'disc jokey', 'hacker', 'turing complete'
 - craft new staffs or discs
+- music for background
+- music for box opening
 
 Discs
 - cds

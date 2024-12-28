@@ -23,9 +23,13 @@ function render() {
         // Draw menu
         menuItems.forEach(item => item.draw(ctx));
     } else {
-        ctx.drawImage(playerImg, player.x, player.y, 48, 48);
+        ctx.drawImage(playerImg, player.x, player.y, settings.playerSize, settings.playerSize);
         lootboxes.forEach(lootbox => lootbox.draw(ctx));
         gameMenu.draw(ctx);
+
+        if (settingsMenuActive) {
+            settingsMenu.draw(ctx);
+        }
 
         // Draw lootbox menu if active
         if (activeLootboxMenu) {
@@ -81,6 +85,33 @@ function render() {
                 // After spin, show final result
                 ctx.drawImage(menu.lootbox.contentsImage, contentX, contentY, contentSize, contentSize);
                 ctx.fillText(menu.lootbox.contents, canvas.width/2, contentY + contentSize + 20);
+
+                // Draw explosion effect
+                if (menu.lootbox.showExplosion && 
+                    Number.isFinite(menu.lootbox.explosionRadius) && 
+                    menu.lootbox.explosionRadius > 0) {
+                    
+                    const centerX = contentX + contentSize/2;
+                    const centerY = contentY + contentSize/2;
+                    const radius = Math.min(menu.lootbox.explosionRadius, menu.lootbox.explosionMaxRadius);
+                    
+                    try {
+                        const gradient = ctx.createRadialGradient(
+                            centerX, centerY, 0,
+                            centerX, centerY, radius
+                        );
+                        gradient.addColorStop(0, 'rgba(255, 200, 0, 0.8)');
+                        gradient.addColorStop(0.5, 'rgba(255, 100, 0, 0.5)');
+                        gradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    } catch (error) {
+                        console.error('[Debug] Gradient error:', error);
+                    }
+                }
             }
             
             if (!menu.lootbox.spinning) {
@@ -93,6 +124,12 @@ function render() {
 function openLootboxMenu(lootbox) {
     console.log('[Debug] Opening lootbox menu:', { x: lootbox.x, y: lootbox.y });
     lootbox.isOpen = true;
+
+    // Play spin sound
+    spinSound.currentTime = 0; // Reset sound to start
+    spinSound.play()
+        .catch(error => console.error('[Debug] Failed to play spin sound:', error));
+        
     lootbox.startSpinning();
     
     // Store the menu state instead of drawing immediately
