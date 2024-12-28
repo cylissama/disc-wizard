@@ -6,6 +6,7 @@ Disc Wizard
 - loot boxes
 - gambling
 - titles like 'disc jokey', 'hacker', 'turing complete'
+- craft new staffs or discs
 
 Discs
 - cds
