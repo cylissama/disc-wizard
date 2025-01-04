@@ -1,4 +1,6 @@
-class SettingsMenu {
+import { SETTINGS_CONFIG } from './settings-config.js';
+
+export class SettingsMenu {
     constructor() {
         this.width = SETTINGS_CONFIG.width;
         this.height = SETTINGS_CONFIG.height;
