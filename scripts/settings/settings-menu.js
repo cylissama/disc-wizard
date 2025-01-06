@@ -1,7 +1,9 @@
 import { SETTINGS_CONFIG } from './settings-config.js';
 
 export class SettingsMenu {
-    constructor() {
+    constructor(settings, player) {
+        this.settings = settings;
+        this.player = player;
         this.width = SETTINGS_CONFIG.width;
         this.height = SETTINGS_CONFIG.height;
         this.x = 800/2 - this.width/2;
@@ -13,15 +15,15 @@ export class SettingsMenu {
     initializeControls() {
         return SETTINGS_CONFIG.controls.map(config => ({
             ...config,
-            value: settings?.[config.id] || config.defaultValue,
+            value: this.settings?.[config.id] || config.defaultValue,
             onChange: (value) => this.handleSettingChange(config.id, value)
         }));
     }
 
     handleSettingChange(settingId, value) {
-        if (!settings) return;
+        if (!this.settings) return;
         
-        settings[settingId] = value;
+        this.settings[settingId] = value;
         if (settingId === 'playerSpeed') {
             player.speed = value;
         }

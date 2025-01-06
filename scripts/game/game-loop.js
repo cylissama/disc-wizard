@@ -1,10 +1,5 @@
-export function gameLoop() {
-    if (lootboxes.length > 0) {
-        //console.log('[Debug] Active lootboxes:', lootboxes.length);
-        //console.log('[Debug] Player position:', {x: player.x, y: player.y});
-    }
-    
+export function gameLoop(update, render) {
     update();
     render();
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(() => gameLoop(update, render));
 }

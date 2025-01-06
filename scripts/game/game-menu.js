@@ -1,4 +1,39 @@
-class GameMenuItem {
+export class GameMenu {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.height = 40;
+        this.items = [];
+    }
+
+    addItem(text) {
+        const itemWidth = this.canvas.width / 4;
+        const x = this.items.length * itemWidth;
+        this.items.push(new GameMenuItem(x, itemWidth, text));
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = '#333';
+        ctx.fillRect(0, 0, this.canvas.width, this.height);
+        this.items.forEach(item => item.draw(ctx));
+    }
+
+    handleHover(x, y) {
+        this.items.forEach(item => {
+            item.isHovered = item.isMouseOver(x, y);
+        });
+    }
+
+    handleClick(x, y) {
+        const clickedItem = this.items.find(item => item.isMouseOver(x, y));
+        if (clickedItem) {
+            console.log('[Debug] Clicked game menu item:', clickedItem.text);
+            return clickedItem.text;
+        }
+        return null;
+    }
+}
+
+export class GameMenuItem {
     constructor(x, width, text) {
         this.x = x;
         this.width = width;
@@ -23,39 +58,5 @@ class GameMenuItem {
 
     isMouseOver(x, y) {
         return y <= this.height && x >= this.x && x < this.x + this.width;
-    }
-}
-
-class GameMenu {
-    constructor() {
-        this.height = 40;
-        this.items = [];
-    }
-
-    addItem(text) {
-        const itemWidth = canvas.width / 4;
-        const x = this.items.length * itemWidth;
-        this.items.push(new GameMenuItem(x, itemWidth, text));
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = '#333';
-        ctx.fillRect(0, 0, canvas.width, this.height);
-        this.items.forEach(item => item.draw(ctx));
-    }
-
-    handleHover(x, y) {
-        this.items.forEach(item => {
-            item.isHovered = item.isMouseOver(x, y);
-        });
-    }
-
-    handleClick(x, y) {
-        const clickedItem = this.items.find(item => item.isMouseOver(x, y));
-        if (clickedItem) {
-            console.log('[Debug] Clicked game menu item:', clickedItem.text);
-            return clickedItem.text;
-        }
-        return null;
     }
 }

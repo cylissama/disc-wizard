@@ -1,4 +1,6 @@
-// scripts/game.js
+import { player } from './player.js';
+import { LootBox } from './lootbox.js';
+import { settings } from './settings/settings-config.js';
 
 function update() {
     handlePlayerMovement();

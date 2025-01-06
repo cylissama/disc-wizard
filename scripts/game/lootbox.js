@@ -1,4 +1,4 @@
-class LootBox {
+export class LootBox {
     constructor(x, y) {
         this.x = x;
         this.y = y;

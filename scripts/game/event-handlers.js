@@ -1,24 +1,24 @@
 // event-handlers.js
-export function initCanvasEvents(canvas, settingsMenu, gameMenu, lootboxes) {
+export function initCanvasEvents(canvas, settingsMenu, gameMenu, menuItems, lootboxes, isMenuActive) {
     canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-  
-      // Example logic
-      if (settingsMenu.active) {
-        settingsMenu.handleClick(mouseX, mouseY);
-        return;
-      }
-  
-      const clickedOption = gameMenu.handleClick(mouseX, mouseY);
-      if (clickedOption === 'Spawn Lootbox') {
-        const x = Math.random() * (canvas.width - 32);
-        const y = Math.random() * (canvas.height - 32);
-        lootboxes.push(new LootBox(x, y));
-      } else if (clickedOption === 'Settings') {
-        settingsMenu.toggle();
-      }
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+    
+        // Example logic
+        if (settingsMenu.active) {
+            settingsMenu.handleClick(mouseX, mouseY);
+            return;
+        }
+    
+        const clickedOption = gameMenu.handleClick(mouseX, mouseY);
+        if (clickedOption === 'Spawn Lootbox') {
+            const x = Math.random() * (canvas.width - 32);
+            const y = Math.random() * (canvas.height - 32);
+            lootboxes.push(new LootBox(x, y));
+        } else if (clickedOption === 'Settings') {
+            settingsMenu.toggle();
+        }
     });
 
     canvas.addEventListener('mousemove', (e) => {
@@ -87,7 +87,6 @@ export function initCanvasEvents(canvas, settingsMenu, gameMenu, lootboxes) {
         }
     });
 
-
     window.addEventListener('keydown', (e) => {
         keys[e.key] = true;
     });
@@ -95,4 +94,4 @@ export function initCanvasEvents(canvas, settingsMenu, gameMenu, lootboxes) {
     window.addEventListener('keyup', (e) => {
         keys[e.key] = false;
     });
-  }
+}
